@@ -41,7 +41,10 @@ INSTALLED_APPS = [
     'user',
     'rest_framework',
     'knox',
-    'rest_framework.authtoken'
+    'rest_framework.authtoken',
+    'receiptpayment',
+    'companybranch',
+    'goldrate',
 ]
 
 MIDDLEWARE = [
@@ -129,16 +132,20 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# REST_FRAMEWORK = {
-#     'DEFAULT_AUTHENTICATION_CLASSES': ('knox.auth.Tokenauthentication',),
-# }
-# REST_KNOX = {
-#     'USER_SERIALIZER': 'user.serializers.UserSerializer',
-#     'TOKEN_TTL': timedelta(hours = 48)
-# }
+REST_KNOX = {
+    'USER_SERIALIZER': 'user.serializers.UserSerializer',
+    'TOKEN_TTL': timedelta(hours = 24)
+}
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'rest_framework.authentication.TokenAuthentication',
+]
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': [
+   
+   'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.TokenAuthentication',
-        # Other authentication classes...
-    ],
+        'rest_framework.authentication.SessionAuthentication',
+    ),
+   
 }
