@@ -14,16 +14,9 @@ class UserSerializer(serializers.ModelSerializer):
 
 class CreateUserSerializer(serializers.ModelSerializer):
     confirm_password = serializers.CharField(write_only=True)
+    password = serializers.CharField(write_only = True)
     # condition for phone number
     
-    phone_regex = RegexValidator(
-        regex=r'^\d{10}$',
-        message="Phone number must be 10 digits."
-    )
-
-    # Define a field for the phone number, applying the RegexValidator
-    phone = serializers.CharField(validators=[phone_regex])
-
     class Meta:
         model = User
         fields = ['username', 'password', 'confirm_password', 'email', 'phone', 'comcode', 'brcode']
@@ -42,8 +35,8 @@ class CreateUserSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError({"password": "Passwords do not match"})
         # giving conditions to password
         password = attrs.get('password')
-        if len(password) < 3 or len(password) > 4:
-            raise serializers.ValidationError({"password" : "Password must have a minimum of 3 characters and a maximum of 4 characters."})
+        if len(password) < 4:
+            raise serializers.ValidationError({"password" : "Password must have a minimum of 4 characters."})
 
 
         return attrs

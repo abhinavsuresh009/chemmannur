@@ -17,8 +17,8 @@ class ChangePasswordSerializer(serializers.Serializer):
             raise serializers.ValidationError({"Password": "Both current password and new password are same"})
         # Check if the new password meets the length requirement
         new_password = data.get('new_password')
-        if len(new_password) < 3 or len(new_password) > 4:
-            raise serializers.ValidationError({"password" : "Password must have a minimum of 3 characters and a maximum of 4 characters."})
+        if len(new_password) < 4:
+            raise serializers.ValidationError({"password" : "Password must have a minimum of 4 characters."})
         
         return data
 
@@ -28,7 +28,7 @@ class ChangePasswordSerializer(serializers.Serializer):
         new_password = validated_data.get('new_password')
 
         if not user.check_password(current_password):
-            raise serializers.ValidationError({"password" : "The old password is incorrect."})
+            raise serializers.ValidationError({"Current_password" : "The current password is incorrect."})
         
         user.set_password(new_password)
         user.save()

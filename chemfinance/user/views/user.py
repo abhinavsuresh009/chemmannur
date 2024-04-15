@@ -33,4 +33,4 @@ def create_user(request):
     elif request.method == 'GET':
         users = User.objects.all()
         serializer = CreateUserSerializer(users, many=True)
-        return Response({'message':'Here is the details','status_code': 201,'data':serializer.data})
+        return Response({'message':'Here is the details','status_code': 200,'data':serializer.data}, status=status.HTTP_200_OK)

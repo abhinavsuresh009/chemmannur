@@ -11,6 +11,6 @@ def my_view(request):
         data = request.data
         return save_receipt_payment_data(ReceiptPaymentSerializer, data)
 
-    return Response({'error': 'Method not allowed'}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
+    return Response({'error': 'Method not allowed', "status_code": 405}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
  
 

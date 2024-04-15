@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'receiptpayment',
     'companybranch',
     'goldrate',
+    'customer',
 ]
 
 MIDDLEWARE = [

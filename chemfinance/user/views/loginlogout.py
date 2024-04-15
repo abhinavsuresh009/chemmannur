@@ -27,4 +27,4 @@ def user_login(request):
 def logout(request):
     # Delete the token associated with the current user
     Token.objects.filter(user=request.user).delete()
-    return Response({"message": "Logged out successfully."}, status=status.HTTP_200_OK)
+    return Response({"message": "Logged out successfully.", "status_code": 204}, status=status.HTTP_204_NO_CONTENT)

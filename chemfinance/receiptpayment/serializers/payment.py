@@ -14,13 +14,13 @@ class PaymentSerializer(serializers.ModelSerializer):
         debit = data.get('debit')
         credit = data.get('credit')
 
-        if transaction_type == 'Cheque' and (debit is not None):
+        if transaction_type == 'Q' and (debit is not None):
             raise serializers.ValidationError("Debit must be null for payment transactions.")
         
-        if transaction_type == 'Cash' and (credit is not None):
+        if transaction_type == 'C' and (credit is not None):
             raise serializers.ValidationError("Credit must be null for receipt transactions.")
 
-        if transaction_type == 'Cheque' and (debit is None and credit is None):
+        if transaction_type == 'Q' and (debit is None and credit is None):
             raise serializers.ValidationError("Either debit or credit must be provided for payment transactions.")
 
         return data

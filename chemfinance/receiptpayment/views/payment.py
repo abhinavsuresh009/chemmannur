@@ -16,11 +16,11 @@ def payment_list(request):
         if start_date:
             queryset = ReceiptPayment.objects.filter(trdate__gte=start_date, trdate__lte=end_date, type = transaction_type)
         serializer = PaymentSerializer(queryset, many=True)
-        return Response(serializer.data)
+        return Response({'message' : 'Here is your Data', 'status_code' : 202 , 'data' : serializer.data} , status=status.HTTP_200_OK)
 
     elif request.method == 'POST':
         serializer = PaymentSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save(type = 'Cheque')
-            return Response({'message' : 'Receipt create successfully', 'status_code' : '200' , 'data' : serializer.data} , status=status.HTTP_201_CREATED)
-        return Response({'message' : 'Error found', 'status_code' : '400' , 'error' : serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+            serializer.save(type = 'Q')
+            return Response({'message' : 'Receipt create successfully', 'status_code' : 201 , 'data' : serializer.data} , status=status.HTTP_201_CREATED)
+        return Response({'message' : 'Error found', 'status_code' : 400 , 'error' : serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
