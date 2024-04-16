@@ -6,7 +6,7 @@ from customer.serializer.customerserializer import *
 from customer.models import Customer
 from rest_framework import status
 
-
+# Post and GET Method for Customer
 
 @api_view(['POST','GET'])  # saving application
 def register_customer(request):
@@ -15,14 +15,11 @@ def register_customer(request):
         if serializer.is_valid():
             serializer.save()
             return Response({"message": "Created successfully.", 'status_code': 201, "data":serializer.data}, status=status.HTTP_201_CREATED)
-        return Response({"message": "Failed to save.", 'status_code': 400}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({"message": "Failed to save.", 'status_code': 400,'error':serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
     elif request.method == 'GET':
-    #     # a=Customer.objects.all()
-    #     # s=CustomerSerializer(a,many=True)
-    #     # return Response(s.data,status=200)
-    #     ...
-        return Response(status=500)
-
+        customers = Customer.objects.all()
+        serializer = CustomerSerializer(customers, many=True)
+        return Response({'message':'Here is the details','status_code': 200,'data':serializer.data}, status=status.HTTP_200_OK)
 # @api_view(['GET'])  # serching by name
 # def get_customer_by_name(request,comcode: str, brcode: str, customer_name: str):
 #     #customer = Customer.objects.filter(comcode=comcode,brcode = brcode,fname__icontains = customer_name).order_by("trdate")
@@ -40,20 +37,42 @@ def register_customer(request):
 #     customer_serializer = CustomerSerializer(customer)
 #     return Response({"message": "Success", "data": customer_serializer.data }, status=200)
 
-@api_view(['GET'])
-def get_customer(request, comcode: str, brcode: str):
+# # Search by NAME and ID Function
+# @api_view(['GET'])
+# def search_customer(request, comcode: str, brcode: str):    
+#     customer_name = request.query_params.get('customer_name')
+#     customer_id = request.query_params.get('customer_id')
+#     if customer_name:
+#         customers = Customer.objects.filter(comcode=comcode, brcode=brcode, fname__icontains=customer_name).order_by("trdate")
+#         if not customer:
+#             return Response({"msg": "Customer not found"}, status=404)
+
+#         serializer = CustomerGetNameSerializer(customers, many=True)
+#         return Response({"msg": "Success", "data": serializer.data}, status=200)
     
+#     if customer_id:
+#         customer = Customer.objects.filter(comcode=comcode, brcode=brcode, cusid=customer_id)
+#         if not customer:
+#             return Response({"msg": "Customer not found"}, status=404)
+#         serializer = CustomerGetNameSerializer(customer, many = True)  # Use CustomerSerializer for single customer
+#         return Response({"msg": "Success", "data": serializer.data}, status=200)
+    
+#     return Response({"msg": "Please provide a name or an id"}, status=400)# from django.db.models import Q
+
+from django.db.models import Q
+
+@api_view(['GET'])
+def search_customer(request, comcode: str, brcode: str):    
     customer_name = request.query_params.get('customer_name')
     customer_id = request.query_params.get('customer_id')
-    if customer_name:
-        customers = Customer.objects.filter(comcode=comcode, brcode=brcode, fname__icontains=customer_name).order_by("trdate")
+    if customer_id or customer_name:
+        query = (Q(comcode=comcode) & Q(brcode=brcode))
+        if customer_name:
+            customers = Customer.objects.filter(query,fname__icontains=customer_name).order_by("trdate")
+        elif customer_id:
+            customers = Customer.objects.filter(query,cusid=customer_id).order_by("trdate")
+        if not customers:
+            return Response({"message": "Customer not found.", 'status_code': 404,'error':serializer.errors}, status=status.HTTP_404_NOT_FOUND)
         serializer = CustomerGetNameSerializer(customers, many=True)
-        return Response({"msg": "Success", "data": serializer.data}, status=200)   
-    if customer_id:
-        customer = Customer.objects.filter(comcode=comcode, brcode=brcode, cusid=customer_id).order_by("trdate")
-        if not customer:
-            return Response({"msg": "Customer not found"}, status=404)
-        serializer = CustomerGetNameSerializer(customer, many = True)
-        return Response({"msg": "Success", "data": serializer.data}, status=200)
-    
-    return Response({"msg": "Please provide a name or an id"}, status=400)
+        return Response({"message": "Created successfully.", 'status_code': 200, "data":serializer.data}, status=status.HTTP_200_OK)    
+    return Response({"message": "Please provide a valid Name or Id.", 'status_code': 400,'error':serializer.errors}, status=status.HTTP_400_BAD_REQUEST)# from django.db.models import Q

@@ -9,12 +9,12 @@ phone_regex = RegexValidator(
     )
 
 validate_username = RegexValidator(
-    regex='[a-zA-Z]$',
+    regex='[a-zA-Z]+$',
     message='Username only contain alphabets',
     code='invalid_name'
 )
 validate_comcode = RegexValidator(
-    regex='[a-zA-Z0-9]$',
+    regex='[a-zA-Z0-9]+$',
     message='Company code cannot contain special characters',
     code='invalid_name'
 )

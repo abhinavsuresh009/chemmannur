@@ -4,7 +4,7 @@ from django.core.validators import RegexValidator
 
 
 validate_comcode = RegexValidator(
-    regex='[a-zA-Z0-9]$',
+    regex='[a-zA-Z0-9]+$',
     message='Field cannot contain special characters',
     code='invalid_name'
 )

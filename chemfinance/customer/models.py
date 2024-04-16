@@ -8,26 +8,26 @@ from django.core.validators import RegexValidator
 
 phone_regex = RegexValidator(
         regex=r'^\d{10}$',
-        message="Phone number must be 10 digits."
+        message="This field must be 10 Numbers."
     )
 validation_address = RegexValidator(
         regex='[a-zA-Z0-9\s.,#-]+$',
         message="Invalid address format."
     )
 validate_name = RegexValidator(
-    regex='[a-zA-Z]+[a-zA-Z]$',
+    regex='[a-zA-Z]+$',
     message='Name must contain only alphabetic characters',
     code='invalid_name'
 )
 validate_number = RegexValidator(
     regex='[0-9]$',
-    message='Name must contain only alphabetic characters',
+    message='This field must contain only Nuemeric characters',
     code='invalid_name'
 )
 
 # Create your models here.
 class Customer(CommonFields):
-    cusid = models.CharField(max_length = 50 , verbose_name = "Customer Id")
+    cusid = models.CharField(max_length = 50 , verbose_name = "Customer Id", unique=True)
     fname = models.CharField(max_length = 100 , verbose_name = "First Name", validators=[validate_name])
     mname = models.CharField(max_length = 100 , verbose_name = "Middle Name", validators=[validate_name])
     lname = models.CharField(max_length = 100 , verbose_name = "Last Name", validators=[validate_name])

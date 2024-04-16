@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'companybranch',
     'goldrate',
     'customer',
+    'goldloan'
 ]
 
 MIDDLEWARE = [

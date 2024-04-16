@@ -21,7 +21,7 @@ def reciept_list(request):
     elif request.method == 'POST':
         serializer = PaymentSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save(type = 'Cash')
+            serializer.save(type = 'C')
             return Response({'message' : 'Receipt create successfully', 'status_code' : 201 , 'data' : serializer.data} , status=status.HTTP_201_CREATED)
         return Response({'message' : 'Error found', 'status_code' : 400 , 'error' : serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 

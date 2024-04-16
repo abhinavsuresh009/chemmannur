@@ -4,14 +4,14 @@ from django.core.validators import RegexValidator
 
 # Create your models here.
 validate_name = RegexValidator(
-    regex='[a-zA-Z]+[a-zA-Z]$',
+    regex='[a-zA-Z0-9]+$',
     message='Name must contain only alphabetic characters',
     code='invalid_name'
 )
 class ReceiptPayment(CommonFields):
     TRANSACTION_TYPES = (
-        ('Cheque', 'Cheque'),
-        ('Cash', 'Cash'),
+        ('Q', 'Q'),
+        ('C', 'C'),
     )
        
     hcode = models.CharField( max_length=100, verbose_name='Head code')
