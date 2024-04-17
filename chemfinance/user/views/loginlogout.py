@@ -16,7 +16,7 @@ def user_login(request):
             # storing user data and token to variables
             user = serializer.validated_data['user']
             token = serializer.validated_data['token']
-            return Response({'message' : 'User logged in  successfully', 'status_code' : '200' , 'token': token.key}, status=status.HTTP_200_OK)
+            return Response({'message' : 'User logged in  successfully', 'status_code' : 200 , 'token': token.key}, status=status.HTTP_200_OK)
         else:
             return Response({'message': 'Error Occur','status_code': 400,'error': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
         

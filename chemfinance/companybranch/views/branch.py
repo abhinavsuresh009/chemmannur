@@ -3,29 +3,26 @@ from rest_framework.response import Response
 from companybranch.models import Branch
 from companybranch.serializers.branch import BranchSerializer
 from rest_framework import status
-
+from django.db import IntegrityError
+from django.http import JsonResponse
 
 # Views for Branch
 
 @api_view(['GET','POST'])
-def branch(request):
+def branch(request, comcode: str):
 # GET Method
-    comcode = request.query_params.get('comcode', None)
-    if request.method == 'GET':
-        companies = Branch.objects.all()
-        serializer = BranchSerializer(companies, many=True,context = {'comcode' : comcode})
+        branch = Branch.objects.filter(company=comcode)
+        serializer = BranchSerializer(branch, many=True)
         return Response({'message' : 'Here is your Data', 'status_code' : 200 , 'data' : serializer.data}, status= status.HTTP_200_OK)
-    
 # POST Method
-    elif request.method == 'POST':
+@api_view(['POST'])
+def create_branch(request):
         serializer = BranchSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response({'message' : 'Create successfully', 'status_code' : 201 , 'data' : serializer.data}, status=status.HTTP_201_CREATED )
-        else:
-            return Response({'message' : 'Error found', 'status_code' : 400 , 'error' : serializer.errors}, status=status.HTTP_400_BAD_REQUEST)  
-        
-# DELETE and UPDATE Method      
+            return Response({'message' : 'All the best Branch is created successfully', 'status_code' : 201 , 'data' : serializer.data}, status= status.HTTP_201_CREATED)
+        return Response({'message' : 'Check before submit', 'status_code' : 400 , 'data' : serializer.data}, status= status.HTTP_400_BAD_REQUEST)
+    # DELETE and UPDATE Method      
 @api_view(['PATCH', 'DELETE'])
 def branch_delete_update(request):
     brcode = request.query_params.get('brcode', None)

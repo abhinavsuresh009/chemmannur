@@ -1,6 +1,6 @@
 from django.db import models
 from django.core.validators import RegexValidator, MinLengthValidator
-
+from django.core.exceptions import ValidationError
 
 # validating name and comcode
 
@@ -24,6 +24,7 @@ validation_address = RegexValidator(
         message="Invalid address format."
     )
 
+
 class CompanyBranch(models.Model):
     
     address = models.TextField(max_length=200,validators=[validation_address])
@@ -33,8 +34,6 @@ class CompanyBranch(models.Model):
     class Meta:
         abstract = True
 
-
-
 # models of Company and Branch
 
 class Company(CompanyBranch):
@@ -43,6 +42,11 @@ class Company(CompanyBranch):
     
 
 class Branch(CompanyBranch):
-    brcode = models.CharField(max_length=20, verbose_name='Branch code', validators=[validate_comcode], unique=True)
+    brcode = models.CharField(max_length=20, verbose_name='Branch code', validators=[validate_comcode])
     brname = models.CharField(max_length=50, verbose_name='Branch name', validators=[validate_name])
-    company = models.ForeignKey(Company,on_delete=models.CASCADE, to_field='comcode', db_column='comcode')
+    company = models.ForeignKey(Company, on_delete=models.CASCADE, to_field='comcode', db_column='comcode')
+    
+   
+    
+        
+    

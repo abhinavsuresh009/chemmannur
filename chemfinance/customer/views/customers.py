@@ -1,10 +1,10 @@
-from django.shortcuts import render
-from django.http import HttpResponse
-from rest_framework.decorators import api_view, throttle_classes
+from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from customer.serializer.customerserializer import *
 from customer.models import Customer
 from rest_framework import status
+from django.db.models import Q
+
 
 # Post and GET Method for Customer
 
@@ -38,28 +38,6 @@ def register_customer(request):
 #     return Response({"message": "Success", "data": customer_serializer.data }, status=200)
 
 # # Search by NAME and ID Function
-# @api_view(['GET'])
-# def search_customer(request, comcode: str, brcode: str):    
-#     customer_name = request.query_params.get('customer_name')
-#     customer_id = request.query_params.get('customer_id')
-#     if customer_name:
-#         customers = Customer.objects.filter(comcode=comcode, brcode=brcode, fname__icontains=customer_name).order_by("trdate")
-#         if not customer:
-#             return Response({"msg": "Customer not found"}, status=404)
-
-#         serializer = CustomerGetNameSerializer(customers, many=True)
-#         return Response({"msg": "Success", "data": serializer.data}, status=200)
-    
-#     if customer_id:
-#         customer = Customer.objects.filter(comcode=comcode, brcode=brcode, cusid=customer_id)
-#         if not customer:
-#             return Response({"msg": "Customer not found"}, status=404)
-#         serializer = CustomerGetNameSerializer(customer, many = True)  # Use CustomerSerializer for single customer
-#         return Response({"msg": "Success", "data": serializer.data}, status=200)
-    
-#     return Response({"msg": "Please provide a name or an id"}, status=400)# from django.db.models import Q
-
-from django.db.models import Q
 
 @api_view(['GET'])
 def search_customer(request, comcode: str, brcode: str):    
@@ -74,5 +52,5 @@ def search_customer(request, comcode: str, brcode: str):
         if not customers:
             return Response({"message": "Customer not found.", 'status_code': 404,'error':serializer.errors}, status=status.HTTP_404_NOT_FOUND)
         serializer = CustomerGetNameSerializer(customers, many=True)
-        return Response({"message": "Created successfully.", 'status_code': 200, "data":serializer.data}, status=status.HTTP_200_OK)    
+        return Response({"message": "Here is your result.", 'status_code': 200, "data":serializer.data}, status=status.HTTP_200_OK)    
     return Response({"message": "Please provide a valid Name or Id.", 'status_code': 400,'error':serializer.errors}, status=status.HTTP_400_BAD_REQUEST)# from django.db.models import Q

@@ -14,5 +14,5 @@ def goldrate(request):
         serializer = GoldrateSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response({"message": "Created successfully", "status_code": 201}, status=status.HTTP_201_CREATED)
+            return Response({"message": "Created successfully", "status_code": 201, "data":serializer.data}, status=status.HTTP_201_CREATED)
         return Response({"message": "Error Found", "status_code": 400}, status=status.HTTP_400_BAD_REQUEST)

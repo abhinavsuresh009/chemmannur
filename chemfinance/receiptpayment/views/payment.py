@@ -16,7 +16,7 @@ def payment_list(request):
         if start_date:
             queryset = ReceiptPayment.objects.filter(trdate__gte=start_date, trdate__lte=end_date, type = transaction_type)
         serializer = PaymentSerializer(queryset, many=True)
-        return Response({'message' : 'Here is your Data', 'status_code' : 202 , 'data' : serializer.data} , status=status.HTTP_200_OK)
+        return Response({'message' : 'Here is your Data', 'status_code' : 200 , 'data' : serializer.data} , status=status.HTTP_200_OK)
 
     elif request.method == 'POST':
         serializer = PaymentSerializer(data=request.data)

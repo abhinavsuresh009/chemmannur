@@ -15,7 +15,7 @@ def change_password(request):
     serializer = ChangePasswordSerializer(data=request.data)
     if serializer.is_valid():
         serializer.update_password(request.user, serializer.validated_data)
-        return Response({"message": "Password updated successfully.", 'status_code': 200}, status=status.HTTP_200_OK)
+        return Response({"message": "Password updated successfully.", 'status_code': 201}, status=status.HTTP_201_CREATED)
     else:
         return Response({'message': 'Error Occurred', 'status_code': 400, 'error': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
