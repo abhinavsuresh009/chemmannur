@@ -40,15 +40,20 @@ class Customer(CommonFields):
     dob = models.DateField(verbose_name="Date of Birth")
     gender = models.CharField(max_length = 20)
     occupation = models.CharField(max_length = 50)
-    mob =  models.CharField(max_length = 20)
+    mob =  models.CharField(max_length = 20, validators=[phone_regex])
     phone =  models.CharField(max_length = 20, validators=[phone_regex])
     email =  models.EmailField()
     sal = models.CharField(max_length = 20 , verbose_name = "Salutation")
-    aadhaar =  models.CharField(max_length = 20)
-    pan =  models.CharField(max_length = 20)
+    aadhaar =  models.CharField(max_length = 20, unique=True)
+    pan =  models.CharField(max_length = 20, unique=True)
     othidname =  models.CharField(max_length = 50 ,blank=True,verbose_name = "Id Collected Name")
     othid =  models.CharField(max_length = 50 ,blank=True,verbose_name = "Id Collected Number")
 
+    def save(self, *args, **kwargs):
+        self.fname = self.fname.capitalize()
+        self.mname = self.mname.capitalize()
+        self.lname = self.lname.capitalize()
+        super().save(*args, **kwargs)
 
-
-
+class ImageModel(models.Model):
+    image = models.ImageField(upload_to='images/')

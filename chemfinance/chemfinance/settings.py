@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 from pathlib import Path
 from datetime import timedelta
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -93,6 +94,8 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
 
 
 # Password validation
@@ -138,7 +141,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 REST_KNOX = {
     'USER_SERIALIZER': 'user.serializers.UserSerializer',
-    'TOKEN_TTL': timedelta(hours = 24)
+    'TOKEN_TTL': timedelta(seconds = 60)
 }
 
 AUTHENTICATION_BACKENDS = [
@@ -155,3 +158,4 @@ REST_FRAMEWORK = {
 }
 CORS_ALLOWED_ORIGINS = ['http://localhost:3000']
 CORS_ALLOW_ALL_ORIGINS = True
+

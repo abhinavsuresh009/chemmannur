@@ -29,6 +29,8 @@ class ReceiptPayment(CommonFields):
     acno = models.CharField(max_length=100, verbose_name='Account number')
     mode = models.CharField(max_length=100)
     
+
+    
 class BankEntry(CommonFields):
     hcode = models.CharField(max_length=100, verbose_name= 'Head code')
     hcode1 = models.CharField(max_length=100, verbose_name= 'Sub name')
@@ -42,4 +44,8 @@ class BankEntry(CommonFields):
     bank_name = models.CharField(max_length=100, validators=[validate_name])
     ifsc = models.CharField(max_length=100)
     acno = models.CharField(max_length=100, verbose_name= 'Account number')
+    mode = models.CharField(max_length=100, default='')
+    
+    
+    
     

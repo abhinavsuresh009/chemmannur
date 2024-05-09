@@ -10,8 +10,8 @@ class UserLoginSerializer(serializers.Serializer):
     password = serializers.CharField(style={'input_type': 'password'})
 
     def validate(self, attrs):
-        username = attrs.get('username')
-        password = attrs.get('password')
+        username = attrs['username']
+        password = attrs['password']
         # checking username and password
         if username and password:
             user = authenticate(username=username, password=password)
@@ -22,7 +22,7 @@ class UserLoginSerializer(serializers.Serializer):
                 attrs['token'] = token
                 return attrs
             else:
-                raise serializers.ValidationError({'Login Error':'Invalid Username or Password'}, code='authorization')
+                raise serializers.ValidationError({'password':'Invalid Username or Password'}, code='authorization')
         else:
-            raise serializers.ValidationError({"empty field" : 'Must include "username" and "password"'}, code='authorization')
+            raise serializers.ValidationError({"password" : 'Must include "username" and "password"'}, code='authorization')
         
