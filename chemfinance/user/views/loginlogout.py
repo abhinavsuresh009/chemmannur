@@ -8,6 +8,7 @@ from rest_framework.permissions import IsAuthenticated
 # User login view
 @api_view(['POST'])
 def user_login(request):
+    
         serializer = UserLoginSerializer(data=request.data)
         if serializer.is_valid():
             # storing user data and token to variables

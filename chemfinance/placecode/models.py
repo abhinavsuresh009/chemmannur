@@ -11,6 +11,7 @@ class State(CommonFields):
     country = models.ForeignKey(Country,to_field='country_code', on_delete=models.CASCADE)
     state_code = models.CharField(max_length=50)
     state_name = models.CharField(max_length=50)
+    country_code = models.CharField(max_length=50, default='')
     
 class City(CommonFields):
     state = models.ForeignKey(State,on_delete=models.CASCADE)

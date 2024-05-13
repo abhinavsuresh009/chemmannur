@@ -15,6 +15,7 @@ class UserLoginSerializer(serializers.Serializer):
         # checking username and password
         if username and password:
             user = authenticate(username=username, password=password)
+            print(user)
             if user:
                 # Retrieve or create a token for the user
                 token, created = Token.objects.get_or_create(user=user)

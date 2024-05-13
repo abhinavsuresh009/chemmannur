@@ -48,7 +48,7 @@ class Customer(CommonFields):
     pan =  models.CharField(max_length = 20, unique=True)
     othidname =  models.CharField(max_length = 50 ,blank=True,verbose_name = "Id Collected Name")
     othid =  models.CharField(max_length = 50 ,blank=True,verbose_name = "Id Collected Number")
-    house = models.CharField(max_length=50)
+    ownhouse = models.CharField(max_length=50)
     def save(self, *args, **kwargs):
         self.fname = self.fname.capitalize()
         self.mname = self.mname.capitalize()

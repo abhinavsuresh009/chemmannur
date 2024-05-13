@@ -9,8 +9,8 @@ class CompanySerializer(serializers.ModelSerializer):
         fields = '__all__'
 
         
-    def validate(self, attrs):
-        comcode = attrs['comcode']
-        if not Company.objects.filter(comcode=comcode).exists():
-            raise serializers.ValidationError({"comcode" : "Company code must be unique within the company."})
-        return super().validate(attrs)
+    # def validate(self, attrs):
+    #     comcode = attrs['comcode']
+    #     if not Company.objects.filter(comcode=comcode).exists():
+    #         raise serializers.ValidationError({"comcode" : "Company code must be unique within the company."})
+    #     return super().validate(attrs)

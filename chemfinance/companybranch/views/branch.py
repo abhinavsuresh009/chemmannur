@@ -5,6 +5,16 @@ from companybranch.serializers.branch import BranchSerializer
 from rest_framework import status
 from rest_framework.pagination import PageNumberPagination
 
+@api_view(['GET'])
+def branches(request, comcode: str):
+    try:
+        branches = Branch.objects.filter(company=comcode)
+        if not branches.exists():
+            return Response({"error": "No branches found for the given company code.", 'status_code': 404}, status=status.HTTP_404_NOT_FOUND)
+        serializer = BranchSerializer(branches, many=True)
+        return Response({"success": "Branches fetched successfully.", 'status_code': 200, "data": serializer.data})
+    except:
+        return Response({"error": "Server error occurred.", 'status_code': 500}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 # Views for Branch
 @api_view(['GET'])
