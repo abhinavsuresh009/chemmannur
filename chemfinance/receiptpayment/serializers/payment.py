@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from receiptpayment.models import ReceiptPayment
+from receiptpayment.models import ReceiptPayment, FingerImage
 
 
 # Serializer for payment 
@@ -24,6 +24,11 @@ class PaymentSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError({"error": "Either debit or credit must be provided for payment transactions."})
 
         return data
+    
+class FingerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FingerImage
+        fields = '__all__'
 
 
     

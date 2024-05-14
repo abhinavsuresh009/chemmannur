@@ -16,7 +16,7 @@ def user_login(request):
             token = serializer.validated_data['token']
             return Response({'message' : 'Logged in successfully', 'status_code' : 200 , 'token': token.key}, status=status.HTTP_200_OK)
         else:
-            return Response({'message': 'error occured','status_code': 400,'error': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'message': 'Login failed','status_code': 400,'error': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 # Logout Views
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])

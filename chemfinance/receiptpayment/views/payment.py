@@ -1,7 +1,7 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from receiptpayment.models import ReceiptPayment
-from receiptpayment.serializers.payment import PaymentSerializer
+from receiptpayment.models import ReceiptPayment, FingerImage
+from receiptpayment.serializers.payment import PaymentSerializer,FingerSerializer
 from rest_framework import status
 
 
@@ -24,3 +24,25 @@ def payment(request):
             serializer.save(type = 'Q')
             return Response({'message' : 'payment create successfully', 'status_code' : 201 , 'data' : serializer.data} , status=status.HTTP_201_CREATED)
         return Response({'message' : 'error occured', 'status_code' : 400 , 'error' : serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['POST'])
+def finger_image(request):
+    
+        
+    if request.method == 'POST':
+        serilaizer = FingerSerializer(data=request.data)
+        if serilaizer.is_valid():
+            serilaizer.save()
+            return Response(serilaizer.data)
+        return Response(status=400)
+@api_view(['GET'])
+def image(request, image_id: str):
+    if request.method == 'GET':
+        image = FingerImage.objects.get(id = image_id)
+        serializer = FingerSerializer(image)
+        return Response(serializer.data)
+    return Response(status=400)
+        
+        
+    
