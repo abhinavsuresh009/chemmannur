@@ -21,8 +21,8 @@ def payment(request):
     elif request.method == 'POST':
         serializer = PaymentSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save(type = 'Q')
-            return Response({'message' : 'payment create successfully', 'status_code' : 201 , 'data' : serializer.data} , status=status.HTTP_201_CREATED)
+            serializer.save(type = 'P')
+            return Response({'message' : 'Payment created successfully', 'status_code' : 201 , 'data' : serializer.data} , status=status.HTTP_201_CREATED)
         return Response({'message' : 'error occured', 'status_code' : 400 , 'error' : serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
 

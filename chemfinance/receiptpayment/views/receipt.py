@@ -2,6 +2,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from receiptpayment.models import ReceiptPayment
 from receiptpayment.serializers.payment import PaymentSerializer
+from receiptpayment.serializers.receipt import ReceiptSerializer
 from rest_framework import status
 
 
@@ -19,9 +20,9 @@ def reciept(request):
     
 
     elif request.method == 'POST':
-        serializer = PaymentSerializer(data=request.data)
+        serializer = ReceiptSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save(type = 'C')
+            serializer.save(type = 'R')
             return Response({'message' : 'receipt created successfully', 'status_code' : 201 , 'data' : serializer.data} , status=status.HTTP_201_CREATED)
         return Response({'message' : 'error occured', 'status_code' : 400 , 'error' : serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 

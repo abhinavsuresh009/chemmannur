@@ -6,6 +6,7 @@ from receiptpayment.views.payment import *
 from receiptpayment.views.receipt import reciept
 from receiptpayment.views.bank import bank
 from receiptpayment.views.daybook import *
+from receiptpayment.views.typeoftransaction import *
 
 urlpatterns = [
     path('receiptpayments/', my_view, name='receiptpayments'),
@@ -16,5 +17,6 @@ urlpatterns = [
     path('daybooks/', daybook_list, name='daybook-list'),
     path('image/<str:image_id>/', image),
     path('daybooks/approve/<str:daybook_id>/', approve_daybook, name='approve-daybook'),
-
+    path('reciept-payment/', reciept_payment, name='reciept_payment'),
+    path('transaction-type/', transaction_list_create, name='transaction-type'),
 ]

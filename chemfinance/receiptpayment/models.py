@@ -2,6 +2,7 @@ from time import timezone
 from django.db import models
 from utils.basemodel import CommonFields
 from django.core.validators import RegexValidator
+import uuid
 
 # Create your models here.
 validate_name = RegexValidator(
@@ -11,8 +12,8 @@ validate_name = RegexValidator(
 )
 class ReceiptPayment(CommonFields):
     TRANSACTION_TYPES = (
-        ('Q', 'Q'),
-        ('C', 'C'),
+        ('P', 'P'),
+        ('R', 'R'),
     )  
     hcode = models.CharField( max_length=100, verbose_name='Head code')
     hcode1 = models.CharField( max_length=100, verbose_name='Sub head')
@@ -22,8 +23,8 @@ class ReceiptPayment(CommonFields):
     debit = models.FloatField(default=0)    
     vono = models.BigIntegerField(verbose_name='Voucher number')
     type = models.CharField(max_length=100, choices= TRANSACTION_TYPES)
-    chkdate = models.DateTimeField(verbose_name='Check date')
-    chkno = models.CharField(max_length=100, verbose_name='Check number')
+    chkdate = models.DateTimeField(verbose_name='Cheque date')
+    chkno = models.CharField(max_length=100, verbose_name='Cheque number')
     bank = models.CharField(max_length=100, validators=[validate_name])
     ifsc = models.CharField(max_length=100)
     acno = models.CharField(max_length=100, verbose_name='Account number')
@@ -47,32 +48,34 @@ class BankEntry(CommonFields):
     mode = models.CharField(max_length=100, default='')
     
     
-class Daybook(CommonFields):    
+class Daybook(CommonFields): 
+    TRANSACTION_TYPES = (
+        ('P', 'P'),
+        ('R', 'R'),
+    )     
     # fk_AccountingHead = models.ForeignKey(AccountingHead,on_delete = models.PROTECT)
     hcode = models.CharField(max_length = 50)    
     tr_head = models.CharField(max_length = 50, verbose_name="Account Head Code")
     name = models.CharField(max_length = 100, verbose_name="Party Name")
     code = models.CharField(max_length = 50)
     code_from = models.CharField(max_length = 50)
-    credit = models.FloatField()
-    debit = models.FloatField()
+    credit = models.FloatField(default=0)
+    debit = models.FloatField(default=0)
     voucher_no = models.IntegerField()
-    cheque_no = models.CharField(max_length = 50)
-    cheque_date = models.DateField()
-    bank_name = models.CharField(max_length = 100)
-    bank_acc_no = models.CharField(max_length = 50)
-    ifse_code = models.CharField(max_length = 100)
-    typ = models.CharField(max_length = 10)
+    cheque_no = models.CharField(max_length = 50, blank=True)
+    cheque_date = models.DateField(blank=True)
+    bank_name = models.CharField(max_length = 100, blank=True)
+    bank_acc_no = models.CharField(max_length = 50, blank=True)
+    ifsc_code = models.CharField(max_length = 100, blank=True)
+    type = models.CharField(max_length=100, choices= TRANSACTION_TYPES)    
     mode = models.CharField(max_length = 50)
-    approved = models.BooleanField()
+    approved = models.BooleanField(default=False)
     approvedby = models.CharField(max_length = 50 , blank=True)
     approvedtime = models.DateTimeField(blank=True, null=True)    
-
-    def approve(self, username):
-        self.approved = True
-        self.approvedby= username
-        self.approvedtime = timezone.now()
-        self.save()
     
 class FingerImage(models.Model):
     fpimg = models.TextField()
+    
+class TypeOfTransaction(models.Model):
+    id = models.UUIDField(primary_key = True, default = uuid.uuid4, editable = False)
+    payment_name = models.CharField(max_length=50, unique=True)
