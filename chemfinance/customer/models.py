@@ -57,3 +57,4 @@ class Customer(CommonFields):
 
 class ImageModel(models.Model):
     image = models.ImageField(upload_to='images/')
+    

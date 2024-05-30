@@ -9,18 +9,19 @@ from rest_framework.parsers import MultiPartParser
 from rest_framework.pagination import PageNumberPagination
 
 # Post and GET Method for Customer
-@api_view(['POST','GET'])  # saving application
+@api_view(['POST'])  # saving application
 def register_customer(request):
-    if request.method == 'POST':
-        serializer = CustomerSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response({"message": "customer created successfully.", 'status_code': 201, "data":serializer.data}, status=status.HTTP_201_CREATED)
-        return Response({"message": "error occured", 'status_code': 400,'error':serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
-    elif request.method == 'GET':
-        customers = Customer.objects.all()
-        serializer = CustomerSerializer(customers, many=True)
-        return Response({'message':'success','status_code': 200,'data':serializer.data}, status=status.HTTP_200_OK)
+    
+    serializer = CustomerSerializer(data=request.data)
+    print(serializer.is_valid())
+    print(serializer.errors)
+            
+    if serializer.is_valid():
+        serializer.save()
+        return Response({"message": "customer created successfully.", 'status_code': 201, "data":serializer.data}, status=status.HTTP_201_CREATED)
+    return Response({"message": "error occured", 'status_code': 400,'error':serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+    
+   
 # @api_view(['GET'])  # serching by name
 # def get_customer_by_name(request,comcode: str, brcode: str, customer_name: str):
 #     #customer = Customer.objects.filter(comcode=comcode,brcode = brcode,fname__icontains = customer_name).order_by("trdate")
@@ -65,20 +66,24 @@ def register_customer(request):
 @api_view(['GET'])
 def filter_by_comcode(request, comcode: str):
     try:
+        aadhaar = request.query_params.get('aadhaar')
+        mob = request.query_params.get('mob')
         brcode = request.query_params.get('brcode',None)
         customer_name = request.query_params.get('customer_name', None)
-        company_code = Company.objects.filter(comcode=comcode)
-        branch_code = Branch.objects.filter(brcode=brcode)
         start_date = request.query_params.get('start_date')
         end_date = request.query_params.get('end_date')
-        if company_code:
+        if comcode:
             customers = Customer.objects.filter(comcode=comcode).order_by('-trdate')
-        if branch_code:
+        if brcode:
             customers = customers.filter(brcode=brcode).order_by('-trdate')
         if customer_name:
             customers = customers.filter(fname__istartswith=customer_name).order_by("-trdate")
+        if aadhaar:
+            customers = customers.filter(aadhaar=aadhaar).order_by("-trdate")
+        if mob:
+            customers = customers.filter(mob=mob).order_by("-trdate")
         if start_date and end_date:
-            customers = customers.filter(trdate__gte=start_date, trdate__lte=end_date).order_by('-trdate')
+            customers = customers.filter(trdate__date__gte=start_date, trdate__date__lte=end_date).order_by('-trdate')
         if not customers.exists():
             return Response({"error": "No customers found.", 'status_code': 404}, status=status.HTTP_404_NOT_FOUND)
         # pagination

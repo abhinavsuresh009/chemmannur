@@ -1,6 +1,6 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from receiptpayment.models import ReceiptPayment, FingerImage
+from receiptpayment.models import ReceiptPayment, FingerImage, Daybook
 from receiptpayment.serializers.payment import PaymentSerializer,FingerSerializer
 from rest_framework import status
 
@@ -12,7 +12,7 @@ def payment(request):
         end_date = request.query_params.get('end_date', None)
         transaction_type = request.query_params.get('transaction_type', None)
         if start_date:
-            queryset = ReceiptPayment.objects.filter(trdate__gte=start_date, trdate__lte=end_date, type = transaction_type)
+            queryset = Daybook.objects.filter(trdate__gte=start_date, trdate__lte=end_date, type = transaction_type)
             serializer = PaymentSerializer(queryset, many=True)
             return Response({'message' : 'success', 'status_code' : 200 , 'data' : serializer.data} , status=status.HTTP_200_OK)
         return Response({'error' : 'error occured', 'status_code' : 400}, status=status.HTTP_400_BAD_REQUEST)
@@ -21,7 +21,7 @@ def payment(request):
     elif request.method == 'POST':
         serializer = PaymentSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save(type = 'P')
+            serializer.save()
             return Response({'message' : 'Payment created successfully', 'status_code' : 201 , 'data' : serializer.data} , status=status.HTTP_201_CREATED)
         return Response({'message' : 'error occured', 'status_code' : 400 , 'error' : serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 

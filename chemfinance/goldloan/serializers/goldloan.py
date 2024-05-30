@@ -6,3 +6,4 @@ class GoldLoanSerializer(serializers.ModelSerializer):
     class Meta:
         model = GoldLoan
         fields = '__all__'
+        

@@ -16,3 +16,7 @@ class GoldLoan(CommonFields):
     scheme = models.CharField(max_length = 50)
     gold_rate = models.FloatField()
     closed = models.BooleanField(default=False)
+    
+    
+class NatureOfLoan(models.Model):
+    title = models.CharField(max_length=50)

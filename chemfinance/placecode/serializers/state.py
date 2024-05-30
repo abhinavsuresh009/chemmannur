@@ -6,15 +6,6 @@ class StateSerializer(serializers.ModelSerializer):
     class Meta:
         model = State
         fields = ['country_code', 'state_code', 'state_name']
-
-  
-    # def validate(self, attrs):
-    #     print(attrs)
-    #     country = attrs['country']
-    #     state_code = attrs['state_code']
-    #     if State.objects.filter(country=country, state_code=state_code).exists():
-    #         raise serializers.ValidationError({"state_code" : "State code must be unique within the Country."})
-    #     return super().validate(attrs)
     def validate(self, attrs):
         if self.context['request'].method == 'POST':
             country_code = attrs.get('country_code')

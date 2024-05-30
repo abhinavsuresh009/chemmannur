@@ -25,7 +25,7 @@ class CustomerGetNameSerializer(serializers.ModelSerializer):
     full_name = serializers.SerializerMethodField()
     class Meta:
         model = Customer
-        fields = ['id', 'cusid', 'full_name','comcode','brcode','address1', 'address2','phone','trdate']
+        fields = ['id', 'cusid', 'full_name','comcode','brcode','address1', 'address2','phone','trdate','mob','aadhaar']
         
     def get_full_name(request, obj):
         return f'{obj.fname} {obj.mname} {obj.lname}'

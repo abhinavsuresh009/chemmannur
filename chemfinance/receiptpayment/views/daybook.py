@@ -3,20 +3,16 @@ from rest_framework.response import Response
 from rest_framework import status
 from receiptpayment.models import Daybook
 from receiptpayment.serializers.daybook import DaybookSerializer
-from django.utils import timezone
 from receiptpayment.utils.util import save_receipt_payment_data  
-
+from datetime import datetime
 
 
 @api_view(['GET'])
 def daybook_list(request):
     if request.method == 'GET':
-        daybooks = Daybook.objects.all()
+        daybooks = Daybook.objects.filter(approved = 0)
         serializer = DaybookSerializer(daybooks, many=True)
-        return Response(serializer.data)
-
-
-
+        return Response({'message' : 'success', 'status_code' : 200 , 'data' : serializer.data} , status=status.HTTP_200_OK)
 @api_view(['POST'])
 def approve_daybook(request, daybook_id: str ):
     try:
@@ -29,9 +25,9 @@ def approve_daybook(request, daybook_id: str ):
 
     daybook.approved = True
     daybook.approvedby = '123'
-    daybook.approvedtime = timezone.now()
+    current_datetime = datetime.utcnow()
+    daybook.approvedtime = current_datetime.strftime("%Y-%m-%dT%H:%M:%SZ")
     daybook.save()
-
     serializer = DaybookSerializer(daybook)
     return Response(serializer.data, status=status.HTTP_200_OK)
 @api_view(['POST'])
@@ -43,6 +39,6 @@ def reciept_payment(request):
         # Call save_receipt_payment_data with validated data
         return save_receipt_payment_data(serializer_class=DaybookSerializer, data=validated_data)
     # Return errors if serializer is not valid
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)  
+    return Response({'message' : 'error occured', 'status_code' : 400 , 'error' : serializer.errors}, status=status.HTTP_400_BAD_REQUEST)  
 
 
